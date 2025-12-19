@@ -55,3 +55,31 @@ Two conventions of byte ordering occuring from the placement of most significant
 little endian is ordered where the least significant bit is first and big endian is when
 the most significant bit it first.
 
+## Practice problem 2.5
+Consider the following three calls to `show_bytes`:
+```
+int a = 0x12345678;
+byte_pointer ap = (byte_pointer) &a;
+show_bytes(ap, 1); /* A. */
+show_bytes(ap, 2); /* B. */
+show_bytes(ap, 3); /* C. */
+```
+Indicate the values that will be printed by each call on a little-endian machine
+and on a big-endian machine:
+*Little Endian*
+A: ` 78`
+B: `56 78 `
+C: `34 56 78`
+*Big Endian* 
+A: `78`
+B: `78 56`
+C: `78 56 34`
+
+Using `show_int` and `show_float`, we determine that the integer 2607352 has 
+hexadecimal representation 0x0027C8F8, while the floating-point number 3510593.0
+has hexadecimal representation 0x4A1F23E0.
+*Write the binary representations of these two hexadecimal values.*
+A: for the int `000000000010011110111000111110000`
+for the float `01001010000111110010001111100000`
+
+
