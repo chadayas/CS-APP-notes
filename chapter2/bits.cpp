@@ -8,8 +8,8 @@ int main(){
 	int result = x & mask;
 	std::cout << std::hex << result << std::endl;
 	// B
-	int comp = (x & mask ) ^ ~x; // do again later
-	std::cout << std::hex << comp<< std::endl;	
+	int comp = (~x & ~0xff) | (x & mask );
+	std::cout << std::hex << comp << std::endl;	
 	// C 
 	int c = ( x ^ mask )| 0xff;
 	std::cout << std::hex << c << std::endl;	

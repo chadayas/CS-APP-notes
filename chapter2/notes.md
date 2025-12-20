@@ -82,8 +82,12 @@ has hexadecimal representation 0x4A1F23E0.
 A: for the int `000000000010011110111000111110000`
 for the float `01001010000111110010001111100000`
 
-
-
+# Integer Representation
+In C and C++ integral data types are represented in ranges pertaining to word size and whether
+the number is negative or nonnegative. Ranges tend from $-2^w$ to $2^w - 1$ for a $w$-bit machine.
+Unsigned encodings encode nonnegative numbers and have a larger range from 0 to $2^w - 1$. the 
+formula $B2U_w$ is as follows.
+$$B2U_w = \sum_{i=0}^{w-1} x_i2^i$$
 
 
 
