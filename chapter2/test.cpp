@@ -34,9 +34,11 @@ void test_show_bytes(int val) {
 int main(){
 	int num = 435;
 	test_show_bytes(num);
-	
-
-
+	short x = 12345;
+	short mx = -x;
+	std::cout << std::endl;
+	show_bytes((byte_pointer) &x, sizeof(x));
+	show_bytes((byte_pointer) &mx, sizeof(mx));
 
 }
 

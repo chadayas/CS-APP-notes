@@ -89,6 +89,17 @@ Unsigned encodings encode nonnegative numbers and have a larger range from 0 to 
 formula $B2U_w$ is as follows.
 $$B2U_w = \sum_{i=0}^{w-1} x_i2^i$$
 
+## Binary to Twos-complement
+When converting binary to twos complement, we place a negative weight the most significant bit (or
+the first bit).
+
+### practice problem 2.18
+Convert registers of a `objdump` output into the two's-complement form.
+**0x2e0**
+Put into binary 0010 1110 0000 word size is 12, this should be a postive number since the most 
+significant bit is zero. Decimal number should be `736`.
+**0x58**
+0101 1000 word size is 8 value should be `160`.
 
 
 
