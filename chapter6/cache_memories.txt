@@ -1,0 +1,50 @@
+
+## Generic Cache Memory Organization 6.4.1 
+
+Consider a computer system where each memory address has m bits that form
+M = 2m unique addresses. As illustrated in Figure 6.25(a), a cache for such a
+machine is organized as an array of S = 2s cache sets. Each set consists of E cache
+lines. Each line consists of a data block of B = 2b bytes, a valid bit that indicates
+whether or not the line contains meaningful information, and t = m − (b + s) tag
+bits (a subset of the bits from the current block’s memory address) that uniquely
+identify the block stored in the cache line.
+In general, a cache’s organization can be characterized by the tuple (S, E,
+B, m). The size (or capacity) of a cache, C, is stated in terms of the aggregate size
+of all the blocks. The tag bits and valid bit are not included. Thus, C = S × E × B.
+When the CPU is instructed by a load instruction to read a word from address
+A of main memory, it sends address A to the cache. If the cache is holding a copy
+of the word at address A, it sends the word immediately back to the CPU. So how
+does the cache know whether it contains a copy of the word at address A? The
+cache is organized so that it can find the requested word by simply inspecting the
+bits of the address, similar to a hash table with an extremely simple hash function.
+Here is how it works:
+The parameters S and B induce a partitioning of the m address bits into the
+three fields shown in Figure 6.25(b). The s set index bits in A form an index into the array of S sets. The first set is set 0, the second set is set 1, and so on. When
+interpreted as an unsigned integer, the set index bits tell us which set the word
+must be stored in. Once we know which set the word must be contained in, the t
+tag bits in A tell us which line (if any) in the set contains the word. A line in the
+set contains the word if and only if the valid bit is set and the tag bits in the line
+match the tag bits in the address A. Once we have located the line identified by
+the tag in the set identified by the set index, then the b block offset bits give us the
+offset of the word in the B-byte data block.
+As you may have noticed, descriptions of caches use a lot of symbols. Fig-
+ure 6.26 summarizes these symbols for your reference.
+
+## Direct-mapped caches
+Caches are grouped into different classes based on E, the number of cache lines
+per set. A cache with exactly one line per set (E = 1) is known as a direct-mapped
+cache (see Figure 6.27). Direct-mapped caches are the simplest both to implement
+and to understand, so we will use them to illustrate some general concepts about
+how caches work.
+Suppose we have a system with a CPU, a register file, an L1 cache, and a main
+memory. When the CPU executes an instruction that reads a memory word w,
+it requests the word from the L1 cache. If the L1 cache has a cached copy of w,
+then we have an L1 cache hit, and the cache quickly extracts w and returns it to
+the CPU. Otherwise, we have a cache miss, and the CPU must wait while the L1
+cache requests a copy of the block containing w from the main memory. When
+the requested block finally arrives from memory, the L1 cache stores the block in
+one of its cache lines, extracts word w from the stored block, and returns it to the
+CPU. The process that a cache goes through of determining whether a request is a
+hit or a miss and then extracting the requested word consists of three steps: (1) set
+selection, (2) line matching, and (3) word extraction.
+
