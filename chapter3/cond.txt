@@ -1,0 +1,68 @@
+This is a disas on gdb of main for the cond.cpp file. Just looking at how the compiler looks at
+overflows within the program.
+
+
+=> 0x0000555555555184 <+12>:    movw   $0x7fff,-0x6(%rbp)
+   0x000055555555518a <+18>:    movw   $0x1,-0x4(%rbp)
+   0x0000555555555190 <+24>:    movswl -0x4(%rbp),%edx
+   0x0000555555555194 <+28>:    movswl -0x6(%rbp),%eax
+   0x0000555555555198 <+32>:    mov    %edx,%esi
+   0x000055555555519a <+34>:    mov    %eax,%edi
+   0x000055555555519c <+36>:    call   0x555555555148 <overflow(short, short)>
+   0x00005555555551a1 <+41>:    mov    %ax,-0x2(%rbp)
+   0x00005555555551a5 <+45>:    mov    $0x0,%eax
+   0x00005555555551aa <+50>:    leave
+   0x00005555555551ab <+51>:    ret
+
+In the first two instructions of main we are simply placing our local variables on the stack.
+the compiler movs our values to 32 bit registers, implying that we may need extra space for any
+computations of our value 0x7fff (32,767), this can be seen with the movswl instructions.
+
+At the call site we jump to the overflow() function. The registers %edi and %esi hold 32,767 and 1
+respectively. in there we do some computations on these registers.
+
+Dump of assembler code for function overflow(short, short):
+=> 0x0000555555555148 <+0>:     endbr64
+   0x000055555555514c <+4>:     push   %rbp
+   0x000055555555514d <+5>:     mov    %rsp,%rbp
+   0x0000555555555150 <+8>:     mov    %edi,%edx
+   0x0000555555555152 <+10>:    mov    %esi,%eax
+   0x0000555555555154 <+12>:    mov    %dx,-0x14(%rbp)
+   0x0000555555555158 <+16>:    mov    %ax,-0x18(%rbp)
+   0x000055555555515c <+20>:    movzwl -0x14(%rbp),%edx
+   0x0000555555555160 <+24>:    movzwl -0x18(%rbp),%eax
+   0x0000555555555164 <+28>:    add    %edx,%eax
+   0x0000555555555166 <+30>:    mov    %ax,-0x4(%rbp)
+   0x000055555555516a <+34>:    movzwl -0x4(%rbp),%eax
+   0x000055555555516e <+38>:    mov    %ax,-0x2(%rbp)
+   0x0000555555555172 <+42>:    movzwl -0x4(%rbp),%eax
+   0x0000555555555176 <+46>:    pop    %rbp
+   0x0000555555555177 <+47>:    ret
+
+
+F that look at this disas of our inline asm functions for overflow instead 
+
+Dump of assembler code for function asm_overflow(short, short):
+   0x0000555555555129 <+0>:     endbr64
+   0x000055555555512d <+4>:     push   %rbp
+   0x000055555555512e <+5>:     mov    %rsp,%rbp
+   0x0000555555555131 <+8>:     push   %rbx
+   0x0000555555555132 <+9>:     mov    %edi,%edx
+   0x0000555555555134 <+11>:    mov    %esi,%eax
+   0x0000555555555136 <+13>:    mov    %dx,-0x1c(%rbp)
+   0x000055555555513a <+17>:    mov    %ax,-0x20(%rbp)
+   0x000055555555513e <+21>:    movzwl -0x1c(%rbp),%eax
+   0x0000555555555142 <+25>:    movzwl -0x20(%rbp),%edx
+   0x0000555555555146 <+29>:    mov    %edx,%ebx
+   0x0000555555555148 <+31>:    add    %bx,%ax
+=> 0x000055555555514b <+34>:    mov    %ax,-0xa(%rbp)
+   0x000055555555514f <+38>:    movzwl -0xa(%rbp),%eax
+   0x0000555555555153 <+42>:    mov    -0x8(%rbp),%rbx
+
+We got the OF flag running 
+
+eflags         0xa96               [ PF AF SF IF OF ]
+
+This is possible since we manually placed our passed parameters inside of word sized registers,
+which are 16 bit, %ax and %bx.
+
