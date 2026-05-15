@@ -13,8 +13,12 @@ extern "C" short asm_overflow(short x, short y){
 extern "C" int if_check(int x ){
    if (x == 0){
       return 0;
-   } else 
+   } else if(x == 1){
       return 1;
+   } else{ 
+      x = 15;
+      return x;
+   }
 }
 
 extern "C" short overflow(short x, short y){
@@ -25,6 +29,7 @@ extern "C" short overflow(short x, short y){
 }
 
 int main(){
-   short x{32767}, y{1}, res; 
-   res = asm_overflow(x,y);
+   int res; 
+   res = if_check(12);
+
 }

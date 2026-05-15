@@ -23,7 +23,12 @@ extern "C" long branch(long x){
    return x;
 }
  
-
+extern "C" long while_jump(long x){
+   while(x != 0){
+      x++;
+   }
+   return x;
+}
 
 extern "C" uint64_t Mul_two_vals(uint64_t x, uint64_t y){
    uint64_t res {x * y};
